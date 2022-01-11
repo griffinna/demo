@@ -1,7 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ResponseDTO;
 import com.example.demo.dto.TestRequestBodyDTO;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController // http 관련 코드 및 요청/응답 매핑
 @RequestMapping("test") // resource
@@ -32,5 +36,11 @@ public class TestController {
         return String.format("Hello World! ID : %d Message : %s", testRequestBodyDTO.getId(), testRequestBodyDTO.getMessage());
     }
 
+    @GetMapping("/testResponseBody")
+    public ResponseDTO<String> testControllerResponseBody() {
+        List<String> list = new ArrayList<>();
+        list.add("Hello World! I'm ResponseDTO");
+        return ResponseDTO.<String>builder().data(list).build();
+    }
 
 }
