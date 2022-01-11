@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController // http 관련 코드 및 요청/응답 매핑
 @RequestMapping("test") // resource
@@ -23,5 +20,11 @@ public class TestController {
     public String testControllerWithPathVariables(@PathVariable(required = false) int id) {
         return String.format("Hello World! ID : %d", id);
     }
+
+    @GetMapping("/testRequestParam")
+    public String testControllerRequestParam(@RequestParam(required = false) int id) {
+        return String.format("Hello World! ID : %d", id);
+    }
+
 
 }
