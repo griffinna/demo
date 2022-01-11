@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.ResponseDTO;
 import com.example.demo.dto.TestRequestBodyDTO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -41,6 +42,16 @@ public class TestController {
         List<String> list = new ArrayList<>();
         list.add("Hello World! I'm ResponseDTO");
         return ResponseDTO.<String>builder().data(list).build();
+    }
+
+    @GetMapping("/testResponseEntity")
+    public ResponseEntity<?> testControllerResponseEntity() {
+        List<String> list = new ArrayList<>();
+        list.add("Hello World! I'm ResponseEntity. Are you got 400!");
+        ResponseDTO<String> response = ResponseDTO.<String>builder().data(list).build();
+        // ResponseEntity : HTTP 응답의 Body, status, header 조작가능
+        // set http status 400
+        return ResponseEntity.badRequest().body(response);
     }
 
 }
