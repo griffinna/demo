@@ -39,7 +39,7 @@ public class TodoController {
             // 2. id 를 null 로 초기화 (생성당시에는 id 가 없어야함)
             entity.setId(null);
 
-            // 3. 임시 사용자 아이디 설정 (추후 인증, 인가 기능 추가 예정)
+            // 3. 임시 사용자 아이디 설정 - TODO :: 추후 인증, 인가 기능 추가 예정
             entity.setUserId(temporaryUserId);
 
             // 4. Todo엔티티 생성
@@ -76,6 +76,29 @@ public class TodoController {
 
         // 4. ResponseDTO 리턴
         return ResponseEntity.ok().body(resopnse);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateTodo(@RequestBody TodoDTO dto) {
+        String temporaryUserId = "temporary-user";  //temporary user id.
+
+        // 1. dto를 entity 로 변환
+        TodoEntity entity = TodoDTO.toEntity(dto);
+
+        // 2. userId 를 temporaryUserId 로 초기화 - TODO :: 추후 인증, 인가 기능 추가 예정
+        entity.setUserId(temporaryUserId);
+
+        // 3. 서비스를 이용해 entity 업데이트
+        List<TodoEntity> entities = service.update(entity);
+
+        // 4. 자바 스트림을 이용해 리턴된 엔티티 리스트를 TodoDTO 리스트로 변환
+        List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
+
+        // 5. 변환된 todoDTO 리스트를 이용해 ResponseDTO 를 초기화
+        ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().data(dtos).build();
+
+        // 6. ResponseDTO 리턴
+        return ResponseEntity.ok().body(response);
     }
 
 }
