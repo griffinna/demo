@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.TodoDTO;
 import com.example.demo.model.TodoEntity;
 import com.example.demo.persistence.TodoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -73,6 +74,24 @@ public class TodoService {
         });
 
         // 5. 사용자의 모든 Todo 리스트를 리턴
+        return retrieve(entity.getUserId());
+    }
+
+    public List<TodoEntity> delete(final TodoEntity entity) {
+        // 1. 저장할 엔티티 유효성 검증
+        validate(entity);
+
+        try {
+            // 2. 엔티티 삭제
+            repository.delete(entity);
+        } catch (Exception e) {
+            // 3. exception 발생 시 id 와 exception 로깅
+            log.error("error deleting entity ", entity.getId(), e);
+            // 4. 컨트롤러로 exception throw (DB 내부 로직을 캡슐화 하려면 새 exception 오브젝트 리턴)
+            throw new RuntimeException(String.format("error deleting entity %s", entity.getId()) );
+
+        }
+        // 5. 새 Todo 리스트를 가져와 리턴
         return retrieve(entity.getUserId());
     }
 
